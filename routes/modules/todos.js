@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => { //查
   const id = req.params.id
   const UserId = req.user.id
   return Todo.findOne({ raw: true, nest: true, where: { id, UserId } })
-    .then(todo => res.render('detail', { todo: todo.toJSON() }))
+    .then(todo => res.render('detail', { todo }))
     .catch(error => console.log(error))
 })
 
@@ -28,7 +28,6 @@ router.get('/:id/edit', (req, res) => {
   const UserId = req.user.id
   return Todo.findOne({ raw: true, nest: true, where: { id, UserId } })
     .then((todo) => {
-      console.log(todo)
       res.render('edit', { todo })
     })
     .catch(error => console.log(error))
@@ -38,7 +37,7 @@ router.put('/:id', (req, res) => { //改
   const id = req.params.id
   const UserId = req.user.id
   const { name, isDone } = req.body
-  return Todo.findOne({ raw: true, nest: true, where: { id, UserId } })
+  return Todo.findOne({ where: { id, UserId } })
     .then((todo) => {
       todo.name = name
       todo.isDone = isDone === 'on'
